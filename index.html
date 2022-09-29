@@ -11,8 +11,32 @@
     <body>
         <div id="main-container">
             <a id="app-title">Date Countdown</a>
-            <div id="widget-area"></div>
-            <button id="add-date-button"></button>
+            <div id="widget-area">
+                <div class="widget"  data-type="widget-template">
+                    <div id="widget-left-area">
+                        <p id="widget-title">Title</p>
+                        <p id="widget-description">Description</p>
+                    </div>
+                    <div id="widget-right-area">
+                        <p id="widget-date-number">6</p>
+                        <p id="widget-date-subtext">DAYS LEFT</p>
+                    </div>
+                </div>
+            </div>
         </div>
+        <div id="add-date-container">
+            <p id="cancel-button">Cancel</p>
+            <div id="add-date-input-container">
+                <p id="add-title">Add New Date</p>
+                <input id="input-title" type="text" placeholder="Title">
+                <input id="input-desc" type="text" placeholder="Description">
+                <input id="input-date" type="date">
+            </div>
+            
+            
+        </div>
+        <div id="blur-overlay"></div>
+        <button id="add-date-button">+</button>
     </body>
+    <script src="index.js"></script>
 </html>

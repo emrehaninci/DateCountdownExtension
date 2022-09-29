@@ -10,7 +10,7 @@ p {
     font-family: 'Lato', sans-serif;
 }
 
-#main-grid{
+#main-container{
     display: flex;
     flex-direction: column;
     width: 100vw;
