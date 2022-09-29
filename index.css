@@ -1,0 +1,18 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #F5FBFF;
+    width: 100vw;
+    height: 600px;
+}
+
+#main-container{
+    
+}
+
+#app-title{
+    font-family: 'Almarai', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #00394C;
+}
