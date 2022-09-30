@@ -2,6 +2,7 @@
     "manifest_version": 3,
     "version": "1.0",
     "name": "Date Countdown",
+    "descripotion": "Smart Extension to easily check how many days left to the dates you want",
     "action": {
         "default_popup": "index.html",
         "default_icon": "images/icon.png"
