@@ -7,12 +7,32 @@ let inputDesc = document.getElementById("input-desc")
 let inputDate = document.getElementById("input-date")
 let widgetArea = document.getElementById("widget-area")
 let deleteButton = document.querySelector(".delete-button")
+let checkBox = document.getElementById("sorting-checkbox")
+let sortingToolTip = document.getElementById("sorting-tooltip")
 
+let dateWidgetList = []
 
 let isAddOverlayActive = false
 let isSplashShowed = false
 
-let dateWidgetList = []
+const SortTypes = {
+    AddedDate : 0,
+    TimeLeft : 1
+}
+
+let sortType = SortTypes.TimeLeft
+
+checkBox.addEventListener('change', function() {
+    if (this.checked) {
+        sortType = SortTypes.TimeLeft
+        sortingToolTip.textContent = "Sorted by Closest Date"
+    } else {
+        sortType = SortTypes.AddedDate
+        sortingToolTip.textContent = "Sorted by Creation Date"
+    }
+    localStorage.setItem("sortType", sortType)
+    renderWidget()
+  });
 
 // Delete Button click function updated because of Chrome extension security policy (inline scripts not allowed)
 document.addEventListener('click', function (e) {
@@ -35,8 +55,7 @@ function deleteWidget(){
     })
 
     localStorage.setItem("dateWidgetList", JSON.stringify(dateWidgetList))
-
-    location.reload()
+    renderWidget()
 }
 
 function hasClass(elem, className) {
@@ -48,7 +67,8 @@ addDateButton.addEventListener("click", function(){
         addNewDate()
         renderWidget()
         closeOverlay()
-    } else{
+    } 
+    else{
         openOverlay()
     }
 })
@@ -63,13 +83,12 @@ function addNewDate(){
         title: inputTitle.value,
         description: inputDesc.value,
         date: inputDate.value,
-        id: dateWidgetList.length
+        id: Date.now()
     }
 
     dateWidgetList.push(dateWidget)
     // Save Date Widgets to local storage
     localStorage.setItem("dateWidgetList", JSON.stringify(dateWidgetList))
-
 }
 
 function openOverlay(){
@@ -89,19 +108,21 @@ function closeOverlay(){
 }
 
 function renderWidget(){
-
     let widgetsFromLocalStorage = JSON.parse(localStorage.getItem("dateWidgetList"))
 
-    // To add widget immediately after click add button
-    let widgetCounter = 0
-    if(dateWidgetList.length > 0){
-        widgetCounter = dateWidgetList.length - 1
-    }
+    // First clear widgets in parent widget except the hidden template
+    clearWidgets()
 
     if(widgetsFromLocalStorage){
-        dateWidgetList = widgetsFromLocalStorage
 
-        for(let i=widgetCounter; i < dateWidgetList.length; i++){
+        // Change widget array by Sort Type
+        if(sortType == SortTypes.TimeLeft){
+            dateWidgetList = sortWidgetByTimeLeft(widgetsFromLocalStorage)
+        } else {
+            dateWidgetList = widgetsFromLocalStorage
+        }
+
+        for(let i=0; i < dateWidgetList.length; i++){
             let tempWidget = document.querySelector("div[data-type='widget-template']").cloneNode(true)
             tempWidget.style.display = "grid"
             
@@ -119,8 +140,6 @@ function renderWidget(){
             
             tempWidget.querySelector(".delete-button").id = dateWidgetList[i].id
             widgetArea.appendChild(tempWidget)
-
-            
         }
     }
 }
@@ -143,12 +162,45 @@ function getColorCode(number){
     }
 }
 
+function sortWidgetByTimeLeft(widgetArray){
+    console.log("sorting: " + widgetArray)
+    widgetArray.sort((a,b) => {
+        return calculateRemainingDays(a.date) - calculateRemainingDays(b.date)
+    })
+
+    return widgetArray
+}
+
 function showSplash(){
-    isSplashShowed = JSON.parse(localStorage.getItem("isSplashShowed"))
+    isSplashShowed = localStorage.getItem("isSplashShowed")
     if(!isSplashShowed){
         window.location.href = 'splash.html';
     }
 }
 
+function activateSorting(){
+    let sortTypeFromLocalStorage = localStorage.getItem("sortType")
+
+    if(sortTypeFromLocalStorage){
+        sortType = sortTypeFromLocalStorage
+
+        if(sortType == SortTypes.AddedDate){
+            sortingToolTip.textContent = "Sorted by Creation Date"
+            checkBox.checked = false
+
+        } else if (sortType == SortTypes.TimeLeft) {
+            sortingToolTip.textContent = "Sorted by Closest Date"
+            checkBox.checked = true
+        }
+    }
+}
+
+function clearWidgets(){
+    while (widgetArea.childNodes.length > 3) {
+        widgetArea.removeChild(widgetArea.lastChild);
+    }
+}
+
+activateSorting()
 showSplash()
 renderWidget()
