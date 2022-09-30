@@ -7,8 +7,11 @@ let inputDesc = document.getElementById("input-desc")
 let inputDate = document.getElementById("input-date")
 let widgetArea = document.getElementById("widget-area")
 let deleteButton = document.querySelector(".delete-button")
+let bodyEl = document.getElementsByTagName("BODY")[0]
 let checkBox = document.getElementById("sorting-checkbox")
 let sortingToolTip = document.getElementById("sorting-tooltip")
+
+console.log(bodyEl)
 
 let dateWidgetList = []
 
@@ -93,6 +96,7 @@ function addNewDate(){
 
 function openOverlay(){
     // Open Add New Date Overlay
+    bodyEl.style.minHeight = "620px"
     addDateContainer.style.display = "block"
     blurOverlay.style.display = "block"
     addDateButton.innerText = "✓"
@@ -101,6 +105,8 @@ function openOverlay(){
 
 function closeOverlay(){
     // Close Add New Date Overlay
+    bodyEl.style.minHeight = "290px"
+
     addDateContainer.style.display = "none"
     blurOverlay.style.display = "none"
     addDateButton.innerText = "+"
