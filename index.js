@@ -10,13 +10,13 @@ let deleteButton = document.querySelector(".delete-button")
 let bodyEl = document.getElementsByTagName("BODY")[0]
 let checkBox = document.getElementById("sorting-checkbox")
 let sortingToolTip = document.getElementById("sorting-tooltip")
-
-console.log(bodyEl)
+const darkModeCbEl = document.getElementById("dark-mode-cb")
 
 let dateWidgetList = []
 
 let isAddOverlayActive = false
 let isSplashShowed = false
+let isDarkModeEnabled = false
 
 const SortTypes = {
     AddedDate : 0,
@@ -36,6 +36,18 @@ checkBox.addEventListener('change', function() {
     localStorage.setItem("sortType", sortType)
     renderWidget()
   });
+
+// Dark Mode Switch
+darkModeCbEl.addEventListener('change', () => {
+	if(darkModeCbEl.checked){
+        darkModeOn()
+        isDarkModeEnabled = true
+    } else{
+        darkModeOff()
+        isDarkModeEnabled = false
+    }
+    localStorage.setItem("isDarkModeEnabled", isDarkModeEnabled)
+});
 
 // Delete Button click function updated because of Chrome extension security policy (inline scripts not allowed)
 document.addEventListener('click', function (e) {
@@ -207,6 +219,30 @@ function clearWidgets(){
     }
 }
 
+// Dark Mode Functions
+function renderDarkMode(){
+    isDarkModeEnabled = localStorage.getItem("isDarkModeEnabled")
+
+    if(isDarkModeEnabled == "true"){
+        darkModeCbEl.checked = true
+        darkModeOn()
+    }
+    else{
+        darkModeCbEl.checked = false
+        darkModeOff()
+    }
+}
+
+function darkModeOn() {
+    document.body.classList.add("dark-mode");
+}
+  
+function darkModeOff() {
+    document.body.classList.remove("dark-mode");
+}
+// Dark Mode Functions
+
+renderDarkMode()
 activateSorting()
 showSplash()
 renderWidget()
