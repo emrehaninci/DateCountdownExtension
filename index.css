@@ -14,7 +14,7 @@ body {
     margin: 0px;
     padding: 0px;
     background-color: var(--clr-background);
-    min-width: 420px;
+    min-width: 440px;
     min-height: 290px;
     max-height: 550px;
 }
